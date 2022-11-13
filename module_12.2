@@ -1,0 +1,44 @@
+CREATE TABLE customers (customerNumber int NOT NULL PRIMARY KEY,firstName VARCHAR(50),lastName VARCHAR(50),address VARCHAR(100),city VARCHAR(50),state VARCHAR(3) CHECK (state IN ('QLD', 'VIC', 'NSW', 'WA', 'TAS', 'NT', 'SA')),postcode int,region VARCHAR(20),email VARCHAR(30));
+CREATE TABLE publishers(
+pubId int NOT NULL PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+contact VARCHAR(50),
+phone int
+);
+CREATE TABLE books(
+isbn int NOT NULL PRIMARY KEY,
+title VARCHAR(50) NOT NULL,
+pubDate DATE,
+pubID int FOREIGN KEY REFERENCES publishers(pubId),
+Cost int,
+retail int,
+discount int,
+category VARCHAR(10) CHECK (category IN ('Fitness', 'Children', 'Computer', 'Cooking', 'Business', 'Literature'))
+);
+CREATE TABLE ordersItems(
+orderNumber int NOT NULL PRIMARY KEY,
+itemNumber int,
+isbn int FOREIGN KEY REFERENCES books(isbn),
+quantity int DEFAULT 1,
+paidEach int
+);
+CREATE TABLE orders(
+orderNumber int FOREIGN KEY REFERENCES ordersItems(orderNumber),
+customerNumber int FOREIGN KEY REFERENCES customers(customerNumber),
+orderDate DATE,
+shipDate DATE,
+street VARCHAR(50),
+city VARCHAR(50),
+state VARCHAR(3) CHECK (state IN ('QLD', 'VIC', 'NSW', 'WA', 'TAS', 'NT', 'SA')),,
+postCode int,
+shipCost int
+);
+CREATE TABLE author(
+authorID int NOT NULL PRIMARY KEY,
+firstName VARCHAR(50),
+lastName VARCHAR(50)
+);
+CREATE TABLE wrote(
+isbn int FOREIGN KEY REFERENCES books(isbn),
+authorID int FOREIGN KEY REFERENCES author(authorID)
+);
