@@ -1,0 +1,71 @@
+import os
+
+import cv2
+
+import imutils
+
+import pickle
+
+import numpy as np
+
+train_paths = []
+
+train_path = "/Users/kartik/Desktop/Projects/Book_Covers_Data/amazon_book_cover_images"
+
+for root, dirs, files in os.walk(train_path):
+
+for file in files:
+
+train_paths.append((os.path.join(root, file)))
+
+hist_train = []
+
+for path in train_paths:
+
+image = cv2.imread(path)
+
+if image is None:
+
+continue
+
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+hist = cv2.calcHist([image], [0, 1, 2], None, [8, 8, 8],[0, 256, 0, 256, 0, 256])
+
+hist = cv2.normalize(hist, None)
+
+hist_train.append((path,hist))
+
+def similarity_index(q_path,m_path):
+
+q_i = cv2.imread(q_path,0)
+
+q_i = cv2.resize(q_i,(8,8))
+
+m_i = cv2.imread(m_path,0)
+
+m_i = cv2.resize(m_i,(8,8))
+
+return ssim(q_i,m_i)
+
+ssim_matches = []
+
+for i in range(len(hist_matches)):
+
+query_image_path = hist_matches[i][0]
+
+matches = []
+
+for j in range(len(hist_matches[i][1])):
+
+match_image_path = hist_matches[i][1][j][1]
+
+si = similarity_index(query_image_path,match_image_path)
+
+if si > similarity_index_threshold:
+
+matches.append((si,match_image_path))
+
+matches.sort(key=lambda x : x[0] , reverse = True)
+
+ssim_matches.append((query_image_path,matches[:ssim_matches_limit]))
